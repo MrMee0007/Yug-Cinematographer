@@ -1,8 +1,7 @@
-import React, { useRef, useState, useCallback, memo } from "react";
+import React, { useRef, useState, useCallback, useEffect, memo } from "react";
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 
-// ✅ Reusable animation config
 const fadeUp = {
   initial: { opacity: 0, y: 50 },
   whileInView: { opacity: 1, y: 0 },
@@ -11,73 +10,88 @@ const fadeUp = {
 
 const VideoCard = ({ project, isDimmed }) => {
   const videoRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const containerRef = useRef(null);
 
-  // ✅ Stable click handler
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // 👀 Lazy load when visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (containerRef.current) observer.observe(containerRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  // ▶️ Play/Pause
   const handleClick = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
 
     if (video.paused) {
-      const playPromise = video.play();
-
-      // ✅ Handle autoplay promise (important for browsers)
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => setIsPlaying(true))
-          .catch(() => {}); // silent fail
-      }
+      video.play().then(() => setIsPlaying(true)).catch(() => {});
     } else {
       video.pause();
       setIsPlaying(false);
     }
   }, []);
 
+  // 🧠 Pause other videos
+  useEffect(() => {
+    if (isPlaying && videoRef.current) {
+      document.querySelectorAll("video").forEach((vid) => {
+        if (vid !== videoRef.current) vid.pause();
+      });
+    }
+  }, [isPlaying]);
+
   return (
     <motion.div
+      ref={containerRef}
       {...fadeUp}
+      viewport={{ once: true }}
       className={`cursor-pointer transition-opacity duration-300 ${
         isDimmed ? "opacity-40" : "opacity-100"
       }`}
     >
-      {/* 🎥 Video Container */}
       <div
         onClick={handleClick}
+        onMouseEnter={() => videoRef.current?.play()}
+        onMouseLeave={() => {
+          videoRef.current?.pause();
+          setIsPlaying(false);
+        }}
         className="relative aspect-[16/10] overflow-hidden rounded-xl bg-gray-100 shadow-md group"
       >
         <video
           ref={videoRef}
-          src={project.video}
+          src={isVisible ? project.video : undefined}
+          poster={project.thumbnail}
           muted
           loop
           playsInline
-          preload="metadata"
-          controls={isPlaying}
+          preload="none"
           className="w-full h-full object-cover"
         />
 
-        {/* ▶️ Play Button Overlay */}
-        <div
-          className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
-            isPlaying
-              ? "opacity-0 pointer-events-none"
-              : "opacity-100"
-          }`}
-        >
-          <div className="w-16 h-16 bg-white border border-gray-300 rounded-full flex items-center justify-center shadow-md scale-100 group-hover:scale-110 transition-transform">
-            <Play className="text-black w-6 h-6 ml-1" fill="currentColor" />
-          </div>
-        </div>
-
-        {/* ⏱ Duration */}
-        {!isPlaying && project.duration && (
-          <div className="absolute top-3 right-3 text-xs bg-white/80 text-black px-2 py-1 rounded">
-            {project.duration}
+        {!isPlaying && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-16 h-16 bg-white border rounded-full flex items-center justify-center shadow-md">
+              <Play className="text-black w-6 h-6 ml-1" fill="currentColor" />
+            </div>
           </div>
         )}
       </div>
 
-      {/* 📄 Info */}
       <div className="mt-4 flex justify-between items-start">
         <div>
           <h3 className="text-lg font-semibold">{project.title}</h3>
@@ -85,12 +99,10 @@ const VideoCard = ({ project, isDimmed }) => {
             {project.category}
           </p>
         </div>
-
         <div className="h-[2px] bg-black w-10 mt-3" />
       </div>
     </motion.div>
   );
 };
 
-// ✅ Prevent unnecessary re-renders
 export default memo(VideoCard);
