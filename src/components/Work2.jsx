@@ -119,7 +119,7 @@ const WorkCard = memo(
           alt={item.title}
           loading="lazy"
           decoding="async"
-          className="w-full h-64 object-cover"
+          className="w-full h-56 sm:h-64 object-cover"
         />
 
         {/* Overlay */}
@@ -220,11 +220,11 @@ export default function DesignerShowcase() {
   }, [selectedCategory]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 px-6 py-20">
+    <div className="bg-gradient-to-br from-gray-50 via-white to-gray-100 px-4 sm:px-6 py-14">
 
       {/* HERO */}
       <div className="max-w-6xl mx-auto text-center mb-20">
-        <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold">
           <span className="bg-gradient-to-r from-black via-gray-700 to-gray-400 bg-clip-text text-transparent">
             Graphic Design
           </span>
@@ -248,7 +248,7 @@ export default function DesignerShowcase() {
       {/* GRID */}
       <motion.div
         layout
-        className="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-10"
+        className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10"
       >
         {filteredWorks.map((item) => {
           const isActive = active === item.id;

@@ -1,9 +1,7 @@
-import { useRef, useEffect, useCallback, memo } from "react";
+import { useRef, useEffect, useCallback, useState, memo } from "react";
 import {
   motion,
   useAnimationFrame,
-  useMotionValue,
-  animate,
 } from "framer-motion";
 
 /* ------------------ DATA ------------------ */
@@ -16,7 +14,6 @@ const videos = [
   { src: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1774477732/IMG_1159_emnsfs.mp4" },
 ];
 
-// ✅ Static loop (no re-render)
 const loopVideos = [...videos, ...videos];
 
 const SeasonSection = () => {
@@ -28,7 +25,7 @@ const SeasonSection = () => {
 
   useEffect(() => {
     if (beltRef.current) {
-      beltHeight.current = beltRef.current.scrollHeight / 2; // dynamic loop size
+      beltHeight.current = beltRef.current.scrollHeight / 2;
     }
   }, []);
 
@@ -38,7 +35,6 @@ const SeasonSection = () => {
 
     y.current -= delta * 0.05;
 
-    // ✅ dynamic reset (no hardcoded 800)
     if (y.current <= -beltHeight.current) {
       y.current += beltHeight.current;
     }
@@ -48,59 +44,45 @@ const SeasonSection = () => {
 
   /* ------------------ MOBILE SLIDER ------------------ */
 
-  const x = useMotionValue(0);
-  const controlsRef = useRef(null);
+  const [index, setIndex] = useState(0);
 
-  const startAutoScroll = useCallback(() => {
-    controlsRef.current = animate(x, "-50%", {
-      ease: "linear",
-      duration: 18,
-      repeat: Infinity,
-    });
-  }, [x]);
-
-  const stopAutoScroll = useCallback(() => {
-    controlsRef.current?.stop();
+  const next = useCallback(() => {
+    setIndex((prev) => (prev + 1) % videos.length);
   }, []);
 
-  useEffect(() => {
-    startAutoScroll();
-    return stopAutoScroll;
-  }, [startAutoScroll, stopAutoScroll]);
+  const prev = useCallback(() => {
+    setIndex((prev) => (prev - 1 + videos.length) % videos.length);
+  }, []);
 
   /* ------------------ RENDER ------------------ */
 
   return (
-    <section className="h-screen flex flex-col md:flex-row bg-white overflow-hidden">
+    <section className="bg-white py-12 md:h-screen flex flex-col md:flex-row overflow-hidden">
 
       {/* 🧠 TEXT */}
-      <div className="w-full md:w-[42%] flex flex-col justify-center items-center md:items-end text-center md:text-right px-6 md:pl-12 md:pr-2 py-10 md:py-0 relative z-10">
+      <div className="w-full md:w-[42%] flex flex-col justify-center items-center md:items-end text-center md:text-right px-6 md:pl-12 md:pr-2 py-8 md:py-0">
         <div className="max-w-md">
-          <h1 className="text-6xl sm:text-7xl md:text-6xl lg:text-8xl font-extrabold text-blue-950 leading-[0.9] tracking-tight">
+          <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-8xl font-extrabold text-blue-950 leading-tight">
             SEASON
           </h1>
 
-          <h1 className="text-6xl sm:text-7xl md:text-6xl lg:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 leading-[0.9] tracking-tight">
+          <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400">
             2025—26
           </h1>
 
-          <p className="mt-4 text-base sm:text-lg text-blue-900 leading-relaxed">
-            A visual journey through the seasons, capturing the essence of nature's ever-changing beauty and the emotions it evokes.
+          <p className="mt-4 text-sm sm:text-base text-blue-900 leading-relaxed">
+            A visual journey through the seasons, capturing nature’s beauty.
           </p>
         </div>
-
-        {/* glow */}
-        <div className="absolute w-[220px] h-[220px] md:w-[280px] md:h-[280px] bg-blue-400/20 blur-[90px] rounded-full top-10 md:top-16 right-10 -z-10" />
       </div>
 
       {/* 🎬 STRIP */}
-      <div className="w-full md:w-[58%] h-[60vh] md:h-full relative flex items-center justify-center overflow-hidden">
+      <div className="w-full md:w-[58%] flex items-center justify-center relative">
 
-        {/* 🖥 DESKTOP */}
+        {/* 🖥 DESKTOP (UNCHANGED) */}
         <div className="hidden md:block relative rotate-[-18deg] scale-125">
           <div className="relative bg-white px-5 py-12 rounded-xl shadow-xl border border-black/10">
 
-            {/* film holes */}
             <div className="absolute top-2 left-0 w-full flex justify-between px-6">
               {Array.from({ length: 9 }).map((_, i) => (
                 <div key={i} className="w-2 h-2 bg-black rounded-sm" />
@@ -113,11 +95,7 @@ const SeasonSection = () => {
               ))}
             </div>
 
-            {/* video belt */}
-            <div
-              ref={beltRef}
-              className="flex flex-col gap-6 items-center will-change-transform"
-            >
+            <div ref={beltRef} className="flex flex-col gap-6 items-center">
               {loopVideos.map((video, i) => (
                 <motion.div key={i} whileHover={{ scale: 1.05 }}>
                   <div className="bg-black p-[3px] rounded-sm shadow-md">
@@ -127,7 +105,6 @@ const SeasonSection = () => {
                       loop
                       autoPlay
                       playsInline
-                      preload="metadata"
                       className="w-[300px] md:w-[330px] h-[180px] md:h-[200px] object-cover"
                     />
                   </div>
@@ -137,35 +114,57 @@ const SeasonSection = () => {
           </div>
         </div>
 
-        {/* 📱 MOBILE */}
-        <div className="md:hidden w-full overflow-hidden -mt-4">
-          <motion.div
-            style={{ x }}
-            className="flex gap-5 px-4 will-change-transform"
-            drag="x"
-            dragConstraints={{ left: -500, right: 0 }} // improved constraint
-            dragElastic={0.08}
-            onDragStart={stopAutoScroll}
-            onDragEnd={startAutoScroll}
-          >
-            {loopVideos.map((video, i) => (
-              <motion.div
-                key={i}
-                className="min-w-[85%] aspect-square rounded-3xl overflow-hidden shadow-lg flex-shrink-0 bg-black"
-                whileTap={{ scale: 0.96 }}
-              >
+        {/* 📱 MOBILE SLIDER */}
+        <div className="md:hidden w-full flex flex-col items-center">
+
+          <div className="relative w-[90%] aspect-[9/16] overflow-hidden rounded-2xl shadow-xl">
+            <motion.div
+              animate={{ x: `-${index * 100}%` }}
+              transition={{ type: "spring", stiffness: 80 }}
+              className="flex w-full h-full"
+            >
+              {videos.map((video, i) => (
                 <video
+                  key={i}
                   src={video.src}
                   muted
                   loop
                   autoPlay
                   playsInline
-                  preload="metadata"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover flex-shrink-0"
                 />
-              </motion.div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* CONTROLS */}
+          <div className="flex gap-4 mt-6">
+            <button
+              onClick={prev}
+              className="px-4 py-2 bg-black text-white rounded-full"
+            >
+              Prev
+            </button>
+            <button
+              onClick={next}
+              className="px-4 py-2 bg-black text-white rounded-full"
+            >
+              Next
+            </button>
+          </div>
+
+          {/* DOTS */}
+          <div className="flex gap-2 mt-4">
+            {videos.map((_, i) => (
+              <div
+                key={i}
+                className={`w-2 h-2 rounded-full ${
+                  i === index ? "bg-black" : "bg-gray-300"
+                }`}
+              />
             ))}
-          </motion.div>
+          </div>
+
         </div>
 
       </div>

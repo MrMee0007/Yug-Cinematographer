@@ -38,27 +38,25 @@ const PROJECTS = [
 /* ------------------ ANIMATIONS ------------------ */
 
 const fadeUp = {
-  initial: { y: 50, opacity: 0 },
+  initial: { y: 40, opacity: 0 },
   whileInView: { y: 0, opacity: 1 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
   viewport: { once: true },
 };
 
 const slideLeft = {
-  initial: { opacity: 0, x: -50 },
+  initial: { opacity: 0, x: -40 },
   whileInView: { opacity: 1, x: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
   viewport: { once: true },
 };
 
 const slideRight = {
-  initial: { opacity: 0, x: 50 },
+  initial: { opacity: 0, x: 40 },
   whileInView: { opacity: 1, x: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
   viewport: { once: true },
 };
-
-/* ------------------ MEMO ------------------ */
 
 const MemoVideoCard = memo(VideoCard);
 
@@ -67,60 +65,55 @@ const MemoVideoCard = memo(VideoCard);
 const RecentWork = () => {
   const [hoveredId, setHoveredId] = useState(null);
 
-  const handleHover = useCallback((id) => {
-    setHoveredId(id);
-  }, []);
-
-  const handleLeave = useCallback(() => {
-    setHoveredId(null);
-  }, []);
+  const handleHover = useCallback((id) => setHoveredId(id), []);
+  const handleLeave = useCallback(() => setHoveredId(null), []);
 
   const featured = PROJECTS[0];
   const others = PROJECTS.slice(1, 3);
   const last = PROJECTS[3];
 
   return (
-    <section className="bg-white text-black py-20 md:py-[16vh] px-4 sm:px-6 md:px-16">
-      <div className="max-w-[1400px] mx-auto">
+    <section className="bg-white text-black py-16 md:py-20 px-4 sm:px-6 md:px-12 lg:px-16">
+      <div className="max-w-[1200px] mx-auto">
 
         {/* 🔥 HERO */}
-        <div className="mb-16 md:mb-32 max-w-[1100px]">
-          <span className="text-[10px] sm:text-xs tracking-[0.3em] text-gray-400 block mb-4 md:mb-6 uppercase">
+        <div className="mb-16 md:mb-20">
+          <span className="text-xs tracking-[0.25em] text-gray-400 block mb-4 uppercase">
             Selected Work
           </span>
 
-          <h1 className="text-3xl sm:text-4xl md:text-[6rem] lg:text-[7rem] font-extrabold leading-[1] md:leading-[0.9] tracking-tight">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
             I EDIT <br />
             WITH <span className="text-gray-400">INTENTION</span>
           </h1>
         </div>
 
         {/* 🎬 FEATURED */}
-        <div className="mb-20 md:mb-32 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+        <div className="mb-16 md:mb-20 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
 
           <MemoVideoCard project={featured} />
 
-          <motion.div {...slideRight} className="max-w-md md:max-w-lg">
-            <h2 className="text-2xl sm:text-3xl md:text-6xl font-extrabold leading-tight md:leading-[0.95]">
+          <motion.div
+            {...slideRight}
+            className="w-full max-w-[92%] sm:max-w-md md:max-w-lg mx-auto md:mx-0 text-center md:text-left"
+          >
+            <h2 className="text-[18px] sm:text-[22px] md:text-[34px] lg:text-[44px] font-extrabold leading-[1.15] tracking-tight break-words">
               {featured.title}
             </h2>
 
-            <p className="mt-4 md:mt-6 text-base md:text-lg text-gray-600 font-medium leading-relaxed">
+            <p className="mt-4 text-[14px] sm:text-[15px] md:text-[16px] text-gray-600 leading-[1.6]">
               Crafted with{" "}
               <span className="font-semibold text-black">precision</span> and{" "}
-              <span className="font-semibold text-black">
-                cinematic flow
-              </span>.
+              <span className="font-semibold text-black">cinematic flow</span>.
               Designed to capture attention instantly.
             </p>
           </motion.div>
         </div>
 
         {/* 🎥 GRID */}
-        <div className="grid md:grid-cols-2 gap-10 md:gap-20 mb-20 md:mb-32">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-16 mb-20 md:mb-24">
           {others.map((project) => {
-            const isDimmed =
-              hoveredId !== null && hoveredId !== project.id;
+            const isDimmed = hoveredId !== null && hoveredId !== project.id;
 
             return (
               <motion.div key={project.id} {...fadeUp}>
@@ -135,39 +128,29 @@ const RecentWork = () => {
           })}
         </div>
 
-        {/* 💎 FINAL SECTION */}
-        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+        {/* 💎 FINAL */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
 
-          {/* TEXT */}
-          <motion.div {...slideLeft} className="max-w-md md:max-w-lg">
-            <span className="text-[10px] sm:text-xs tracking-[0.3em] text-gray-400 block mb-4 md:mb-6 uppercase">
+          <motion.div {...slideLeft} className="max-w-lg">
+            <span className="text-xs tracking-[0.25em] text-gray-400 block mb-4 uppercase">
               Final Showcase
             </span>
 
-            <h2 className="text-2xl sm:text-3xl md:text-6xl font-extrabold leading-tight md:leading-[0.95] tracking-tight">
+            <h2 className="text-2xl md:text-5xl font-extrabold leading-tight">
               Built for <br />
               <span className="text-gray-400">Impact & Memory</span>
             </h2>
 
-            <p className="mt-4 md:mt-8 text-base md:text-xl text-gray-600 leading-relaxed font-medium">
+            <p className="mt-4 md:mt-6 text-sm md:text-lg text-gray-600 leading-relaxed">
               This piece represents the balance between{" "}
-              <span className="text-black font-semibold">
-                visual intensity
-              </span>{" "}
+              <span className="text-black font-semibold">visual intensity</span>{" "}
               and{" "}
               <span className="text-black font-semibold">
                 storytelling clarity
               </span>.
-              Designed not just to impress — but to{" "}
-              <span className="text-black font-semibold">
-                stay with the viewer.
-              </span>
             </p>
-
-            <div className="mt-6 md:mt-8 w-12 h-[2px] bg-black" />
           </motion.div>
 
-          {/* VIDEO */}
           <motion.div {...slideRight}>
             <MemoVideoCard project={last} />
           </motion.div>
