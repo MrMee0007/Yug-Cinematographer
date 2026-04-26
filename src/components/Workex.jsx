@@ -1,364 +1,282 @@
-// import React, { useEffect, useRef, memo } from "react";
-// import { motion, useScroll, useTransform } from "framer-motion";
-// import gsap from "gsap";
-// import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// gsap.registerPlugin(ScrollTrigger);
-
-// /* ================= DATA ================= */
-// const workData = [
-//   {
-//     role: "Concert Videographer",
-//     organization: "GLA University",
-//     year: "2025",
-//     description:
-//       "Covered Ankit Tiwari And Panther Concerts Performance.",
-//     clips: [
-//       { src: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1774475769/IMG_1405_lslxrm.mp4" },
-//     ],
-//   },
-//   {
-//     role: "Official Media Crew Member",
-//     organization: "Galgotias University",
-//     year: "2026",
-//     description:
-//       "Covered Navjot Ahuja Concerts Performance.",
-//     clips: [
-//       { src: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1774477718/IMG_1242_m1rgo8.mp4" },
-//     ],
-//   },
-//   {
-//     role: "Freelance Video Editor",
-//     organization: "Independent Projects",
-//     year: "Present",
-//     description: "Professional editing services for artists and brands.",
-//     clips: [
-//       { src: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1774557759/IMG_2009_1_bzvgqy.mp4" },
-//     ],
-//   },
-// ];
-
-// /* ================= CARD ================= */
-// const Card = memo(({ item }) => (
-//   <motion.div
-//     whileHover={{ y: -6, scale: 1.01 }}
-//     whileTap={{ scale: 0.98 }}
-//     className="bg-white border border-gray-100 rounded-2xl md:rounded-3xl p-5 md:p-8 shadow-md md:shadow-lg"
-//   >
-//     <h3 className="text-lg md:text-2xl font-bold text-gray-900">
-//       {item.role}
-//     </h3>
-
-//     <p className="text-blue-500 text-sm md:text-base font-medium mb-2">
-//       {item.organization}
-//     </p>
-
-//     <p className="text-gray-600 text-sm md:text-base mb-4 md:mb-5">
-//       {item.description}
-//     </p>
-
-//     {/* 📺 VIDEO (FULLY VISIBLE) */}
-//     <div className="w-full aspect-[4/3] bg-black rounded-xl md:rounded-2xl overflow-hidden flex items-center justify-center">
-//       <video
-//         src={item.clips[0].src}
-//         muted
-//         loop
-//         autoPlay
-//         playsInline
-//         preload="metadata"
-//         className="w-full h-full object-contain"
-//       />
-//     </div>
-//   </motion.div>
-// ));
-
-// /* ================= MAIN ================= */
-// export default function WorkexStunning() {
-//   const sectionRef = useRef(null);
-//   const timelineRef = useRef(null);
-
-//   /* Scroll progress */
-//   const { scrollYProgress } = useScroll({
-//     target: timelineRef,
-//     offset: ["start start", "end end"],
-//   });
-
-//   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
-//   /* GSAP animation (optimized) */
-//   useEffect(() => {
-//     const ctx = gsap.context(() => {
-//       gsap.from(".card", {
-//         opacity: 0,
-//         y: 60,
-//         stagger: 0.2,
-//         duration: 0.9,
-//         ease: "power3.out",
-//         scrollTrigger: {
-//           trigger: sectionRef.current,
-//           start: "top 85%",
-//         },
-//       });
-//     }, sectionRef);
-
-//     return () => ctx.revert();
-//   }, []);
-
-//   return (
-//     <section
-//       ref={sectionRef}
-//       className="relative py-20 sm:py-28 px-4 sm:px-8 md:px-20 bg-gradient-to-br from-white via-blue-50 to-white"
-//     >
-//       {/* 🔥 HEADING */}
-//       <div className="text-center mb-16 sm:mb-24">
-//         <h2 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-gray-900">
-//           EXPERIENCE
-//         </h2>
-//         <p className="text-blue-500 mt-2 tracking-[0.3em] text-[10px] sm:text-xs">
-//           MY JOURNEY
-//         </p>
-//       </div>
-
-//       {/* ================= TIMELINE ================= */}
-//       <div ref={timelineRef} className="relative">
-
-//         {/* Desktop Line */}
-//         <div className="hidden md:block absolute left-1/2 top-0 w-[2px] h-full bg-gray-200" />
-
-//         <motion.div
-//           style={{ height: lineHeight }}
-//           className="hidden md:block absolute left-1/2 top-0 w-[3px] bg-gradient-to-b from-blue-500 to-purple-500 origin-top"
-//         />
-
-//         {/* ================= CARDS ================= */}
-//         <div className="flex flex-col gap-12 sm:gap-20 md:gap-24">
-//           {workData.map((item, index) => {
-//             const isLeft = index % 2 === 0;
-
-//             return (
-//               <div
-//                 key={index}
-//                 className="grid grid-cols-1 md:grid-cols-2 items-center gap-6 md:gap-10 relative"
-//               >
-
-//                 {/* 📱 MOBILE DESIGN */}
-//                 <div className="block md:hidden">
-//                   <div className="bg-white rounded-2xl p-5 shadow-md border border-gray-100">
-                    
-//                     {/* Year Badge */}
-//                     <span className="inline-block text-xs font-semibold px-3 py-1 mb-3 rounded-full bg-blue-100 text-blue-600">
-//                       {item.year}
-//                     </span>
-
-//                     <h3 className="text-lg font-bold text-gray-900">
-//                       {item.role}
-//                     </h3>
-
-//                     <p className="text-blue-500 text-sm mb-2">
-//                       {item.organization}
-//                     </p>
-
-//                     <p className="text-gray-600 text-sm mb-4">
-//                       {item.description}
-//                     </p>
-
-//                     <div className="w-full aspect-[4/3] bg-black rounded-xl overflow-hidden">
-//                       <video
-//                         src={item.clips[0].src}
-//                         muted
-//                         loop
-//                         autoPlay
-//                         playsInline
-//                         preload="metadata"
-//                         className="w-full h-full object-contain"
-//                       />
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 {/* 🖥️ DESKTOP DESIGN */}
-//                 <div className="hidden md:contents">
-//                   {isLeft ? (
-//                     <>
-//                       <div className="card">
-//                         <Card item={item} />
-//                       </div>
-
-//                       <div className="text-left">
-//                         <h2 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-//                           {item.year}
-//                         </h2>
-//                       </div>
-//                     </>
-//                   ) : (
-//                     <>
-//                       <div className="text-right">
-//                         <h2 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
-//                           {item.year}
-//                         </h2>
-//                       </div>
-
-//                       <div className="card">
-//                         <Card item={item} />
-//                       </div>
-//                     </>
-//                   )}
-
-//                   {/* Timeline Dot */}
-//                   <div className="absolute left-1/2 -translate-x-1/2 w-3 h-3 bg-blue-500 rounded-full shadow-md" />
-//                 </div>
-
-//               </div>
-//             );
-//           })}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
-
-import { useState, useCallback } from "react";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
-/* ================= DATA ================= */
+/* =========================
+   DATA
+========================= */
 const projects = [
   {
-    title: "Concert Videographer",
-    organization: "GLA University",
-    year: "2025",
-    description: "Covered Ankit Tiwari And Panther Concerts Performance.",
-    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1774475769/IMG_1405_lslxrm.mp4",
-    num: "001",
+    id: 1,
+    title: "Grata Burger",
+    category: "Commercial",
+    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1777120021/grata_burger_1_hu5gfp.mp4",
+    tagline: "Sizzle meets story.",
   },
   {
-    title: "Official Media Crew Member",
-    organization: "Galgotias University",
-    year: "2026",
-    description: "Covered Navjot Ahuja Concerts Performance.",
-    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1774477718/IMG_1242_m1rgo8.mp4",
-    num: "002",
+    id: 2,
+    title: "HitA — Short Clip",
+    category: "Advertisement",
+    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1777120050/HITAAAA_yqgkf5.mp4",
+    tagline: "Bold cuts. Instant impact.",
   },
   {
-    title: "Freelance Video Editor",
-    organization: "Independent Projects",
-    year: "Present",
-    description: "Professional editing services for artists and brands.",
-    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1774557759/IMG_2009_1_bzvgqy.mp4",
-    num: "003",
+    id: 3,
+    title: "Crimson Dreams",
+    category: "Commercial",
+    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1777120021/grata_Sandwchh_vim2ol.mp4",
+    tagline: "Elegance in motion.",
+  },
+  {
+    id: 4,
+    title: "Urban Pulse",
+    category: "Music Video",
+    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1777123812/gennie_in_a_bottle_by8agg.mp4",
+    tagline: "Feel the rhythm.",
+  },
+  {
+    id: 5,
+    title: "AI Edits ",
+    category: "Advertisement",
+    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1777120048/Sequence_01_spe5ks.mp4",
+    tagline: "AI-enhanced.",
+  },
+  {
+    id: 6,
+    title: "AlrightTV Promo",
+    category: "Commercial",
+    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1777123725/AlrightTV_Promo_1_nfwpou.mp4",
+    tagline: "Fast cuts. Bold Emotion.",
+  },
+  {
+    id: 7,
+    title: "Design Stories — Short Clip",
+    category: "Stories",
+    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1777124685/Cloth_Fast_cut_1_wqdmib.mp4",
+    tagline: "Texture meets motion.",
+  },
+  {
+    id: 8,
+    title: "AI Edits ",
+    category: "Editorial",
+    video: "https://res.cloudinary.com/ds0y1ut9q/video/upload/v1777123708/ANI_2_1_i5ehlc.mp4",
+    tagline: "AI-enhanced storytelling.",
   },
 ];
 
-const Index = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+const categories = [
+  "All",
+  "Commercial",
+  "Advertisement",
+  "Editorial",
+  "Music Video",
+  "Stories",
+];
 
-  const navigate = useCallback((direction) => {
-    if (isTransitioning) return;
+/* =========================
+   VIDEO CARD
+========================= */
+const VideoCard = ({
+  project,
+  index,
+  hoveredProject,
+  setHoveredProject,
+  setActiveVideo,
+}) => {
+  const videoRef = useRef(null);
+  const isHovered = hoveredProject === project.id;
 
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + direction + projects.length) % projects.length);
-      setTimeout(() => setIsTransitioning(false), 400);
-    }, 100);
-  }, [isTransitioning]);
-
-  const project = projects[currentIndex];
+  // 🎬 Dynamic layout
+  const isLarge = index % 3 === 0;
+  const isReel = index % 3 === 1;
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-white via-blue-50 to-white text-gray-900 overflow-hidden">
+    <motion.div
+      className={`relative overflow-hidden cursor-pointer ${
+        isLarge ? "md:col-span-2" : ""
+      }`}
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08 }}
+      onMouseEnter={() => {
+        setHoveredProject(project.id);
+        videoRef.current?.play();
+      }}
+      onMouseLeave={() => {
+        setHoveredProject(null);
+        if (videoRef.current) {
+          videoRef.current.pause();
+          videoRef.current.currentTime = 0;
+        }
+      }}
+      onClick={() => setActiveVideo(project.video)}
+    >
+      <video
+        ref={videoRef}
+        src={project.video}
+        muted
+        loop
+        playsInline
+        controls={isHovered}
+        className={`w-full object-cover border border-white/40 ${
+          isLarge
+            ? "h-[520px]"
+            : isReel
+            ? "h-[520px] aspect-[9/16]"
+            : "h-[520px]"
+        }`}
+      />
 
-      {/* MAIN */}
-      <div className="relative min-h-screen flex flex-col lg:flex-row items-center justify-center px-5 sm:px-8 lg:px-16 py-16 gap-10">
+      <div className="absolute inset-0 bg-black/40 pointer-events-none" />
 
-        {/* 🎥 VIDEO */}
-        <div className="w-full lg:w-[55%] h-[260px] sm:h-[380px] md:h-[500px] lg:h-[70vh] rounded-2xl overflow-hidden shadow-xl border border-gray-200 bg-black">
-          <video
-            src={project.video}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className={`w-full h-full object-cover transition-all duration-700 ${
-              isTransitioning ? "opacity-0 scale-105" : "opacity-100 scale-100"
-            }`}
-          />
-        </div>
+      {/* <div className="absolute bottom-0 p-6 pointer-events-none">
+        <span className="text-red-400 text-xs tracking-[0.3em] uppercase">
+          {project.category}
+        </span>
 
-        {/* 📝 CONTENT */}
-        <div className="flex-1 flex flex-col items-center lg:items-end text-center lg:text-right">
+        <h3 className="font-display text-2xl text-white uppercase mt-2">
+          {project.title}
+        </h3>
 
-          {/* TITLE */}
-          <h1 className="font-extrabold uppercase leading-tight 
-            text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-gray-900">
-            {project.title}
-          </h1>
-
-          {/* ORG */}
-          <p className="text-blue-600 mt-3 text-sm sm:text-base md:text-lg font-semibold">
-            {project.organization}
-          </p>
-
-          {/* DESC */}
-          <p className="mt-4 max-w-md text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed">
-            {project.description}
-          </p>
-
-          {/* YEAR */}
-          <h2 className="mt-6 font-extrabold tracking-wide
-            text-3xl sm:text-4xl md:text-5xl lg:text-6xl
-            bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            {project.year}
-          </h2>
-
-          {/* 🔘 BUTTONS */}
-          <div className="flex gap-4 mt-10">
-            <button
-              onClick={() => navigate(-1)}
-              className="w-14 h-14 sm:w-16 sm:h-16 rounded-full 
-              bg-white border border-gray-300 
-              flex items-center justify-center text-xl sm:text-2xl
-              hover:bg-gray-100 hover:scale-110 active:scale-95
-              transition-all duration-300 shadow-md"
-            >
-              ←
-            </button>
-
-            <button
-              onClick={() => navigate(1)}
-              className="w-14 h-14 sm:w-16 sm:h-16 rounded-full 
-              bg-white border border-gray-300 
-              flex items-center justify-center text-xl sm:text-2xl
-              hover:bg-gray-100 hover:scale-110 active:scale-95
-              transition-all duration-300 shadow-md"
-            >
-              →
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* 🔢 BOTTOM BAR */}
-      <div className="absolute bottom-6 left-5 right-5 flex justify-between items-center">
-
-        <div className="text-sm sm:text-base md:text-lg tracking-widest text-gray-500">
-          <span className="text-gray-900 font-bold text-lg sm:text-xl">
-            {project.num}
-          </span>
-          <span className="mx-2">/</span>
-          <span>00{projects.length}</span>
-        </div>
-
-        <Link
-          to="/gallery"
-          className="text-sm sm:text-base md:text-lg uppercase tracking-widest 
-          text-gray-600 hover:text-gray-900 transition"
-        >
-          All Projects →
-        </Link>
-      </div>
-    </div>
+        <p className="text-white/60 text-sm mt-2">
+          {project.tagline}
+        </p>
+      </div> */}
+    </motion.div>
   );
 };
 
-export default Index;
+/* =========================
+   MAIN PAGE
+========================= */
+const WorksPage = () => {
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [hoveredProject, setHoveredProject] = useState(null);
+  const [activeVideo, setActiveVideo] = useState(null);
+
+  const filtered =
+    activeCategory === "All"
+      ? projects
+      : projects.filter((p) => p.category === activeCategory);
+
+  return (
+    <main className="bg-black text-white">
+
+      {/* 🔥 WRAPPER FIX */}
+      <div className="pt-[80px]">
+
+        {/* HERO */}
+        <section className="min-h-[60vh] flex items-center px-6 md:px-12 lg:px-20 py-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-12"
+          >
+    <p className="text-red-400 uppercase tracking-[0.4em] text-sm mb-4">
+      Selected Works
+    </p>
+
+    <div className="flex items-start gap-4 mb-8">
+      <span className="accent-dot-large mt-6 shadow-red-500/50 shadow-lg" />
+
+      <div>
+        <h2 className="editorial-heading-large text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 leading-none">
+          VIS—
+        </h2>
+        <h2 className="editorial-heading-large text-white -mt-2 md:-mt-4 leading-none">
+          UALS
+        </h2>
+      </div>
+    </div>
+
+    <p className="text-white/60 max-w-xl leading-relaxed">
+      Every frame is intentional. Every cut carries rhythm.  
+      These visuals are crafted to capture attention instantly 
+      and leave a lasting emotional impact.
+    </p>
+
+    <div className="mt-10 h-[1px] w-40 bg-gradient-to-r from-red-500 to-transparent" />
+  </motion.div>
+
+</section>
+
+        {/* FILTER */}
+        <div className="sticky top-[80px] bg-black/80 backdrop-blur px-6 md:px-12 lg:px-20 py-4 flex gap-6 overflow-x-auto">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`uppercase text-xs ${
+                activeCategory === cat
+                  ? "text-red-400"
+                  : "text-white/40"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* GRID */}
+        <section className="px-6 md:px-12 lg:px-20 py-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filtered.map((project, index) => (
+            <VideoCard
+              key={project.id}
+              project={project}
+              index={index}
+              hoveredProject={hoveredProject}
+              setHoveredProject={setHoveredProject}
+              setActiveVideo={setActiveVideo}
+            />
+          ))}
+        </section>
+
+      </div>
+
+      {/* FULLSCREEN */}
+      <AnimatePresence>
+        {activeVideo && (
+          <motion.div
+            className="fixed inset-0 bg-black/90 z-[999] flex items-center justify-center p-6"
+            onClick={() => setActiveVideo(null)}
+          >
+            <motion.video
+              src={activeVideo}
+              controls
+              autoPlay
+              className="w-full max-w-5xl rounded-xl"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+              {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="text-center border border-white/10 py-12 px-6 rounded-2xl bg-white/5 backdrop-blur-md"
+        >
+          <h3 className="text-white font-display text-2xl mb-4 uppercase">
+            Let’s Create Something Powerful
+          </h3>
+
+          <p className="text-white/50 mb-6">
+            High-impact visuals designed to stop scrolls and drive engagement.
+          </p>
+
+          <a
+            href="/contact"
+            className="inline-block px-8 py-3 bg-gradient-to-r from-red-600 to-orange-500 
+                       hover:from-red-700 hover:to-orange-600 
+                       text-white uppercase tracking-widest text-sm transition"
+          >
+            Start a Project
+          </a>
+        </motion.div>
+
+    </main>
+  );
+};
+
+export default WorksPage;

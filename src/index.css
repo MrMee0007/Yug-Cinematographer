@@ -1,41 +1,22 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&display=swap');
+
+
 @import 'tailwindcss';
 @plugin 'lightswind/plugin';
-/* ===============================
-   Theme Configuration (Tailwind v4)
-================================ */
 
-@theme {
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
 
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-}
-
-/* ===============================
-   Base Variables
-================================ */
-
+/* ================= BASE VARIABLES ================= */
 @layer base {
   :root {
     --background: 40 20% 94%;
     --foreground: 0 0% 10%;
+
+    --card: 40 20% 94%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 40 20% 94%;
+    --popover-foreground: 0 0% 10%;
 
     --primary: 0 78% 50%;
     --primary-foreground: 0 0% 100%;
@@ -46,7 +27,7 @@
     --muted: 40 10% 88%;
     --muted-foreground: 0 0% 35%;
 
-    --accent: 40 15% 90%;
+    --accent: 40 50% 90%;
     --accent-foreground: 0 0% 10%;
 
     --destructive: 0 84% 60%;
@@ -55,11 +36,27 @@
     --border: 40 10% 80%;
     --input: 40 10% 80%;
     --ring: 0 78% 50%;
+
+    --radius: 0rem;
+
+    /* Fonts */
+    --font-display: 'Anton', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Animations */
+    --ease-cinematic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-dramatic: cubic-bezier(0.76, 0, 0.24, 1);
   }
 
   .dark {
     --background: 0 0% 8%;
     --foreground: 40 20% 94%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 40 20% 94%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 40 20% 94%;
 
     --primary: 0 78% 55%;
     --primary-foreground: 0 0% 100%;
@@ -70,38 +67,131 @@
     --muted: 0 0% 18%;
     --muted-foreground: 40 10% 65%;
 
-    --accent: 0 0% 18%;
+    --accent: 78 43% 18%;
     --accent-foreground: 40 20% 94%;
-
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 40 20% 94%;
 
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 0 78% 55%;
   }
+}
 
+/* ================= BASE STYLES ================= */
+@layer base {
   * {
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
   }
-}
-.stroke-text {
-  -webkit-text-stroke: 1px rgba(255, 0, 0, 0.4);
-}
 
-@keyframes shine {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 150%;
+  ::selection {
+    @apply bg-primary text-primary-foreground;
   }
 }
 
-.animate-shine {
-  animation: shine 3s ease-in-out infinite;
+/* ================= COMPONENTS ================= */
+@layer components {
+
+  .editorial-heading {
+    font-family: var(--font-display);
+    @apply uppercase tracking-tight leading-none;
+  }
+
+  .editorial-heading-giant {
+    font-family: var(--font-display);
+    @apply uppercase tracking-tight leading-[0.85];
+    font-size: clamp(4rem, 15vw, 12rem);
+  }
+
+  .editorial-heading-large {
+    font-family: var(--font-display);
+    @apply uppercase tracking-tight leading-[0.9];
+    font-size: clamp(3rem, 10vw, 8rem);
+  }
+
+  .section-dark {
+    @apply bg-secondary text-secondary-foreground;
+  }
+
+  .accent-dot-large {
+    @apply inline-block w-5 h-5 rounded-full bg-primary;
+  }
+
+  .text-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  .btn-editorial {
+    @apply relative inline-flex items-center px-8 py-4 
+           bg-primary text-primary-foreground uppercase tracking-widest
+           text-sm overflow-hidden transition-all duration-300;
+  }
+
+  .btn-editorial::before {
+    content: '';
+    @apply absolute inset-0 bg-secondary translate-y-full transition-transform duration-300;
+  }
+
+  .btn-editorial:hover::before {
+    @apply translate-y-0;
+  }
+
+  .btn-editorial span {
+    @apply relative z-10;
+  }
+
+  .scroll-indicator {
+    @apply flex flex-col items-center gap-2 text-xs uppercase tracking-[0.3em];
+  }
 }
+
+/* ================= UTILITIES ================= */
+@layer utilities {
+
+  .animate-reveal-up {
+    animation: revealUp 0.8s var(--ease-cinematic) forwards;
+  }
+
+  .animate-fade-in-slow {
+    animation: fadeInSlow 1.2s var(--ease-cinematic) forwards;
+  }
+}
+
+/* ================= KEYFRAMES ================= */
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInSlow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ================= SCROLLBAR ================= */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 0, 0, 0.5);
+}
+

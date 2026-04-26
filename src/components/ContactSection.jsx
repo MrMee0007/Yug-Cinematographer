@@ -1,170 +1,211 @@
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
 import {
   Mail,
-  Phone,
   MapPin,
+  Phone,
   Instagram,
   Linkedin,
-  ArrowRight,
-  Clock,
-  Globe,
-  Briefcase,
+  Youtube,
 } from "lucide-react";
-import Footer from "./Footer";
 
-export default function ContactSection() {
+const ContactSection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
   return (
-    <section className="relative px-6 md:px-20 py-24 bg-gray-50 text-gray-900 overflow-hidden">
+    <section
+      id="contact"
+      ref={ref}
+      className="relative bg-[#050505] py-24 md:py-32 lg:py-40 px-6 md:px-12 lg:px-20 overflow-hidden"
+    >
+      {/* 🔥 Background glow */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-black to-red-900/10 pointer-events-none" />
 
-      {/* Subtle Background */}
-      <div className="absolute inset-0 -z-10">
-        <img
-          src="https://res.cloudinary.com/ds0y1ut9q/image/upload/v1774478196/IMG_0851_hfkbzy.webp"
-          alt="background"
-          className="w-full h-full object-cover opacity-5"
-          loading="lazy"
-        />
-      </div>
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
 
-      <div className="max-w-7xl mx-auto mt-20">
-
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-20"
-        >
-          <p className="text-blue-600 uppercase tracking-widest text-sm font-semibold mb-3">
-            Let’s Connect
-          </p>
-
-          <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight">
-            Start Your Project
-          </h2>
-
-          <div className="w-20 h-[3px] bg-blue-600 mx-auto mt-6 rounded-full"></div>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-16 items-start">
-
-          {/* LEFT SIDE DETAILS */}
-          <div className="space-y-10">
-
-            <div className="space-y-6">
-
-              <div className="flex gap-4 items-start">
-                <Phone className="text-blue-600 w-6 h-6" />
-                <div>
-                  <p className="text-gray-500 text-sm">Phone</p>
-                  <p className="font-bold text-lg">+91 8887-586830</p>
-                </div>
+          {/* LEFT */}
+          <div>
+            {/* HEADER */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8 }}
+              className="flex items-start gap-4 mb-12"
+            >
+              <span className="accent-dot-large mt-6 shadow-[0_0_20px_rgba(255,80,0,0.6)]" />
+              <div>
+                <h2 className="editorial-heading-large text-white">LET’S</h2>
+                <h2 className="editorial-heading-large text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 -mt-2 md:-mt-4">
+                  CREATE
+                </h2>
               </div>
+            </motion.div>
 
-              <div className="flex gap-4 items-start">
-                <Mail className="text-blue-600 w-6 h-6" />
-                <div>
-                  <p className="text-gray-500 text-sm">Email</p>
-                  <p className="font-bold text-lg">yuggupta9236@gmail.com</p>
+            {/* DESCRIPTION */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-white/60 text-lg leading-relaxed mb-12 ml-9 max-w-md"
+            >
+              Whether it’s a high-impact reel, brand storytelling, or cinematic
+              edits — I help transform raw footage into powerful visual
+              experiences that capture attention and drive engagement.
+            </motion.p>
+
+            {/* CONTACT INFO */}
+            <div className="space-y-6 ml-9">
+
+              {/* EMAIL */}
+              <motion.a
+                href="mailto:youremail@gmail.com"
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="flex items-center gap-4 group"
+              >
+                <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/30 
+                                flex items-center justify-center 
+                                shadow-[0_0_15px_rgba(255,80,0,0.3)]
+                                group-hover:bg-red-500 group-hover:border-red-500 transition">
+                  <Mail size={18} className="text-red-400 group-hover:text-white" />
                 </div>
-              </div>
+                <span className="text-white/80 group-hover:text-orange-400 transition">
+                  youremail@gmail.com
+                </span>
+              </motion.a>
 
-              <div className="flex gap-4 items-start">
-                <MapPin className="text-blue-600 w-6 h-6" />
-                <div>
-                  <p className="text-gray-500 text-sm">Location</p>
-                  <p className="font-bold text-lg">
-                    Noida / Delhi / Gurgaon
-                  </p>
+              {/* PHONE */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="flex items-center gap-4"
+              >
+                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/20 
+                                flex items-center justify-center">
+                  <Phone size={18} className="text-white" />
                 </div>
-              </div>
+                <span className="text-white/60">+91 XXXXX XXXXX</span>
+              </motion.div>
 
-              <div className="flex gap-4 items-start">
-                <Clock className="text-blue-600 w-6 h-6" />
-                <div>
-                  <p className="text-gray-500 text-sm">Working Hours</p>
-                  <p className="font-bold text-lg">
-                    Mon – Sat | 10 AM – 7 PM
-                  </p>
+              {/* LOCATION */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="flex items-center gap-4"
+              >
+                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/20 
+                                flex items-center justify-center">
+                  <MapPin size={18} className="text-white" />
                 </div>
-              </div>
-
-
-
+                <span className="text-white/60">
+                  India (Available Worldwide)
+                </span>
+              </motion.div>
             </div>
 
-            {/* Services */}
-            <div className="pt-8 border-t border-gray-200">
-              <div className="flex items-center gap-3 mb-4">
-                <Briefcase className="text-blue-600 w-6 h-6" />
-                <h3 className="font-bold text-lg">Services</h3>
-              </div>
-
-              <ul className="space-y-2 text-gray-700 font-medium">
-                <li>• Cinematic Videography</li>
-                <li>• Commercial Shoots</li>
-                <li>• Music Videos</li>
-                <li>• Wedding Films</li>
-                <li>• Professional Editing</li>
-              </ul>
-            </div>
-
-
+            {/* SOCIAL */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="flex gap-4 mt-12 ml-9"
+            >
+              {[Instagram, Linkedin, Youtube].map((Icon, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  className="w-12 h-12 border border-white/20 flex items-center justify-center
+                             bg-white hover:bg-gradient-to-r hover:from-red-500 hover:to-orange-400
+                             hover:border-transparent hover:text-white
+                             transition-all duration-300"
+                >
+                  <Icon size={18} />
+                </a>
+              ))}
+            </motion.div>
           </div>
 
-          {/* RIGHT SIDE FORM */}
-          <motion.form
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="bg-white border border-gray-200 p-10 rounded-3xl space-y-7 shadow-lg"
+          {/* RIGHT FORM */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="relative bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 overflow-hidden"
           >
+            {/* glow */}
+            <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-orange-400/10 opacity-30" />
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">
-                Full Name
-              </label>
+            <h3 className="relative font-display text-2xl text-white uppercase mb-8">
+              Start Your Project
+            </h3>
+
+            <form onSubmit={handleSubmit} className="relative space-y-6">
+
               <input
                 type="text"
-                className="w-full border border-gray-300 focus:border-blue-600 rounded-lg px-4 py-3 outline-none transition"
+                placeholder="Your Name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                className="w-full bg-transparent border-b border-white/20 py-3 text-white 
+                           placeholder:text-white/40 focus:border-orange-400 transition"
               />
-            </div>
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">
-                Email Address
-              </label>
               <input
                 type="email"
-                className="w-full border border-gray-300 focus:border-blue-600 rounded-lg px-4 py-3 outline-none transition"
+                placeholder="Your Email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                className="w-full bg-transparent border-b border-white/20 py-3 text-white 
+                           placeholder:text-white/40 focus:border-orange-400 transition"
               />
-            </div>
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">
-                Project Details
-              </label>
               <textarea
-                rows="4"
-                className="w-full border border-gray-300 focus:border-blue-600 rounded-lg px-4 py-3 outline-none transition resize-none"
-              ></textarea>
-            </div>
+                rows={4}
+                placeholder="Tell me about your project..."
+                value={formData.message}
+                onChange={(e) =>
+                  setFormData({ ...formData, message: e.target.value })
+                }
+                className="w-full bg-transparent border-b border-white/20 py-3 text-white 
+                           placeholder:text-white/40 focus:border-orange-400 resize-none transition"
+              />
 
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-3 py-4 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-700 transition duration-300"
-            >
-              Send Proposal
-              <ArrowRight size={18} />
-            </button>
+              <button
+                type="submit"
+                className="w-full mt-8 py-4 bg-gradient-to-r from-red-500 to-orange-400 
+                           hover:from-red-600 hover:to-orange-500
+                           text-white uppercase tracking-widest transition-all duration-300"
+              >
+                Send Message
+              </button>
 
-          </motion.form>
+            </form>
+          </motion.div>
 
         </div>
-
       </div>
     </section>
-
-
   );
-}
+};
+
+export default ContactSection;
